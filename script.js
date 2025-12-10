@@ -18,76 +18,88 @@ function getComputerChoice() {
     }
 }
 
-// console.log(getComputerChoice())
+ 
+function playRound(playerSelection, computerChoice) {
+    let results = document.querySelector("div");
+    const result = document.createElement("p");
 
-function getHumanChoice() {
-    let humanChoice = window.prompt("Choose Rock, Paper, or Scissors: ")
-    return humanChoice.toUpperCase()
-}
-
-// console.log(getHumanChoice())
-
-function playRound(humanChoice, computerChoice) {
-    if(humanChoice === "ROCK"){
+    if(playerSelection === "ROCK"){
         switch(computerChoice){
             case "ROCK":
-                console.log("TIE! ROCK on ROCK!")
+                result.textContent = "TIE! ROCK on ROCK!";
                 break
             case "PAPER":
                 computerScore++
-                console.log("You LOSE! PAPER covers ROCK!")
+                result.textContent = "You LOSE! PAPER covers ROCK!";
                 break
             case "SCISSORS":
                 humanScore++
-                console.log("You WIN! ROCK beats SCISSORS!")
+                result.textContent = "You WIN! ROCK beats SCISSORS!";
         }
-    } else if(humanChoice === "PAPER"){
+    } else if(playerSelection === "PAPER"){
         switch(computerChoice){
             case "ROCK":
                 humanScore++
-                console.log("You WIN! PAPER covers ROCK!")
+                result.textContent = "You WIN! PAPER covers ROCK!";
                 break
             case "PAPER":
-                console.log("You TIE! PAPER on PAPER!")
+                result.textContent = "You TIE! PAPER on PAPER!";
                 break
             case "SCISSORS":
                 computerScore++
-                console.log("You LOSE! SCISSORS cuts PAPER!")
+                result.textContent = "You LOSE! SCISSORS cuts PAPER!";
         }
-    } else if(humanChoice === "SCISSORS"){
+    } else if(playerSelection === "SCISSORS"){
         switch(computerChoice){
             case "ROCK":
                 computerScore++
-                console.log("You LOSE! ROCK beats SCISSORS!")
+                result.textContent = "You LOSE! ROCK beats SCISSORS!";
                 break
             case "PAPER":
                 humanScore++
-                console.log("You WIN! SCISSORS cuts PAPER!")
+                result.textContent = "You WIN! SCISSORS cuts PAPER!";
                 break
             case "SCISSORS":
-                console.log("You TIE! SCISSORS on SCISSORS!")
+                result.textContent = "You TIE! SCISSORS on SCISSORS!";
         }
     } else {
-        console.log("PICK ROCK, PAPER, OR SCISSORS BUCKO!")
+        result.textContent = "PICK ROCK, PAPER, OR SCISSORS BUCKO!";
     }
+    results.appendChild(result);
 }
-
-// playRound(getHumanChoice(), getComputerChoice())
 
 function playGame() {
-    console.log("Welcome to Rock Paper Scissors!")
-    console.log("We will play 5 rounds!")
 
-    for(x = 0; x < 5; x++) {
-        playRound(getHumanChoice(), getComputerChoice())
-        console.log(`Round ${x+1} Score: YOU: ${humanScore} ME: ${computerScore}`)
-    }
-    
-    if(humanScore > computerScore) {
-        console.log("You WON! Congratulations!")
-    } else {
-        console.log("You LOST! HAHAHAHA!")
-    }
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            let playerSelection = button.id.toUpperCase();
+            console.log(playerSelection);
+            playRound(playerSelection, getComputerChoice());
+
+            const score = document.querySelector("h2");
+
+            score.textContent = `SCORE: YOU: ${humanScore} ME: ${computerScore}`;
+
+            let results = document.querySelector("div");
+            const result = document.createElement("p");
+
+            if(humanScore == 5) {
+                result.textContent = "You WON! Congratulations!";
+                results.appendChild(result);
+                
+                buttons.forEach(btn => btn.disabled = true);
+                return;
+            } else if(computerScore == 5) {
+                result.textContent = "You LOST! HAHAHAHA!";
+                results.appendChild(result);
+
+                buttons.forEach(btn => btn.disabled = true);
+                return;
+            } 
+        })
+    })
 }
 
-playGame()
+playGame();
+
