@@ -1,6 +1,26 @@
 let humanScore = 0
 let computerScore = 0
 
+const score = document.querySelector("h2");
+const rpsButtons = document.querySelectorAll(".rps");
+let results = document.querySelector("div");
+
+rpsButtons.forEach(btn => btn.disabled = true);
+
+rpsButtons.forEach((rpsButton) => {
+    rpsButton.addEventListener("click", () => {
+        let playerSelection = rpsButton.id.toUpperCase();
+        playRound(playerSelection, getComputerChoice());
+
+        score.textContent = `SCORE: YOU: ${humanScore} ME: ${computerScore}`;
+
+        if(humanScore === 5 || computerScore === 5) {
+            endGame();
+        }
+
+    });
+});
+
 
 function getComputerChoice() {
     let num = Math.random()
@@ -20,7 +40,6 @@ function getComputerChoice() {
 
  
 function playRound(playerSelection, computerChoice) {
-    let results = document.querySelector("div");
     const result = document.createElement("p");
 
     if(playerSelection === "ROCK"){
@@ -69,37 +88,32 @@ function playRound(playerSelection, computerChoice) {
 }
 
 function playGame() {
+    humanScore = 0;
+    computerScore = 0;
 
-    const buttons = document.querySelectorAll("button");
-    buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-            let playerSelection = button.id.toUpperCase();
-            console.log(playerSelection);
-            playRound(playerSelection, getComputerChoice());
+    score.textContent = `SCORE: YOU: ${humanScore} ME: ${computerScore}`;
+    results.innerHTML="";
 
-            const score = document.querySelector("h2");
+    rpsButtons.forEach(btn => btn.disabled = false);
 
-            score.textContent = `SCORE: YOU: ${humanScore} ME: ${computerScore}`;
-
-            let results = document.querySelector("div");
-            const result = document.createElement("p");
-
-            if(humanScore == 5) {
-                result.textContent = "You WON! Congratulations!";
-                results.appendChild(result);
-                
-                buttons.forEach(btn => btn.disabled = true);
-                return;
-            } else if(computerScore == 5) {
-                result.textContent = "You LOST! HAHAHAHA!";
-                results.appendChild(result);
-
-                buttons.forEach(btn => btn.disabled = true);
-                return;
-            } 
-        })
-    })
 }
 
-playGame();
+function endGame() {
+    const result = document.createElement("p");
+
+    if(humanScore === 5) {
+        result.textContent = "You WON! Congratulations!";
+    } else {
+        result.textContent = "You LOST! HAHAHAHA!";
+    }
+
+    results.appendChild(result);
+    rpsButtons.forEach(btn => btn.disabled = true);
+}
+
+const resetGame = document.querySelector("#reset");
+resetGame.addEventListener("click", () => {
+    playGame();
+});
+
 
